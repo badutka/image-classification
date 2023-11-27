@@ -18,8 +18,8 @@ def run_image_saving():
     image_saver = ImageSaver()
     ds_train, ds_val = image_saver.load_dataset()
     tf.io.gfile.makedirs(data_dir)
-    image_saver.save_imgs_by_label(ds_train, 60000, data_dir)
-    image_saver.save_imgs_by_label(ds_train, 10000, data_dir)
+    image_saver.save_imgs_by_label(ds_train, len(ds_train), data_dir)
+    image_saver.save_imgs_by_label(ds_val, len(ds_val), data_dir)
     os.makedirs(data_dir_labeled, exist_ok=True)
     image_saver.move_imgs(data_dir, data_dir_labeled)
 
