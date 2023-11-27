@@ -19,6 +19,7 @@ def load_imgs_from_dir():
     datagen = ImageDataGenerator(
         rescale=1. / 255,
         validation_split=0.2,
+        # color_mode='grayscale',
         # shear_range=0.2,
         # zoom_range=0.2,
         # horizontal_flip=True
@@ -97,12 +98,12 @@ def save_imgs():
 
 
 def dataset_info(ds_train):
-    batch = next(iter(ds_train))
-    # batch = ds_train.take(1)
+    # ds_train is _PrefetchDataset, batch is tf.Tensor
+    batch = next(iter(ds_train.take(1)))
     print(f'shape of a single batch (batch size, height, width, no. channels): {batch[0].shape}')
-    print(f'max value: {batch[0].max()}, min value: {batch[0].min()}')
+    print(f'max value: {batch[0].numpy().max()}, min value: {batch[0].numpy().min()}')
 
     fig, ax = plt.subplots(ncols=4, figsize=(20, 20))
     for idx, img in enumerate(batch[0][:4]):
         ax[idx].imshow(img)
-        ax[idx].title.set_text(batch[1][idx])
+        ax[idx].title.set_text(batch[1][idx].numpy())
