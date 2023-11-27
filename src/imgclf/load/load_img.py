@@ -12,21 +12,18 @@ import matplotlib.pyplot as plt
 
 
 def load_imgs_from_dir():
-    # Define parameters
     batch_size = 32
     img_size = (28, 28)
-    data_dir = 'artifacts/datasets/mnist_split/'  # Replace with the path to your MNIST dataset directory
+    data_dir = 'artifacts/datasets/mnist_split/'
 
-    # Create an ImageDataGenerator
     datagen = ImageDataGenerator(
         rescale=1. / 255,
         validation_split=0.2,
-        # shear_range=0.2,  # Shear transformation
-        # zoom_range=0.2,  # Zoom transformation
-        # horizontal_flip=True  # Horizontal flip
+        # shear_range=0.2,
+        # zoom_range=0.2,
+        # horizontal_flip=True
     )
 
-    # Create the training dataset
     ds_train = datagen.flow_from_directory(
         directory=data_dir,
         target_size=img_size,
@@ -35,7 +32,6 @@ def load_imgs_from_dir():
         subset='training'
     )
 
-    # Create the validation dataset
     ds_val = datagen.flow_from_directory(
         directory=data_dir,
         target_size=img_size,
@@ -44,17 +40,7 @@ def load_imgs_from_dir():
         subset='validation'
     )
 
-    # n_samples = ds_train.samples, ds_val.samples
-    #
-    # # Convert the generators to TensorFlow datasets
-    # ds_train = tf.data.Dataset.from_generator(lambda: ds_train, output_signature=(tf.TensorSpec(shape=(None, 28, 28, 1), dtype=tf.float32), tf.TensorSpec(shape=(None,), dtype=tf.int64)))
-    # ds_val = tf.data.Dataset.from_generator(lambda: ds_val, output_signature=(tf.TensorSpec(shape=(None, 28, 28, 1), dtype=tf.float32), tf.TensorSpec(shape=(None,), dtype=tf.int64)))
-    #
-    # # Optionally, prefetch data to improve performance
-    # ds_train = ds_train.prefetch(tf.data.experimental.AUTOTUNE)
-    # ds_val = ds_val.prefetch(tf.data.experimental.AUTOTUNE)
-
-    return ds_train, ds_val  # , n_samples
+    return ds_train, ds_val
 
 
 def save_split_imgs():
@@ -111,7 +97,7 @@ def save_imgs():
 
 
 def dataset_info(ds_train):
-    batch = iter(ds_train).next()
+    batch = next(iter(ds_train))
     # batch = ds_train.take(1)
     print(f'shape of a single batch (batch size, height, width, no. channels): {batch[0].shape}')
     print(f'max value: {batch[0].max()}, min value: {batch[0].min()}')
