@@ -10,24 +10,25 @@ import numpy as np
 import shutil
 import matplotlib.pyplot as plt
 
+batch_size = 128
+img_size = (28, 28)
+data_dir = 'artifacts/datasets/mnist_split/'
+validation_split_seed = 42
+
 
 def load_imgs_from_dir():
-    batch_size = 128
-    img_size = (28, 28)
-    data_dir = 'artifacts/datasets/mnist_split/'
-    validation_split_seed = 42
-
-    ds_train, ds_val = tf.keras.utils.image_dataset_from_directory(
+    dataset = tf.keras.utils.image_dataset_from_directory(
         directory=data_dir,
         batch_size=batch_size,
         image_size=img_size,
-        validation_split=0.2,
-        subset='both',
+        # validation_split=0.2,
+        # subset='both',
         seed=validation_split_seed,
         # color_mode='grayscale',
     )
 
-    return ds_train, ds_val
+    return dataset
+
 
 
 def save_split_imgs():
