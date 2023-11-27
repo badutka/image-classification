@@ -1,11 +1,14 @@
 import os
 import tensorflow as tf
 import tensorflow_datasets as tfds
+# noinspection PyUnresolvedReferences
 from tensorflow.keras.utils import to_categorical
+# noinspection PyUnresolvedReferences
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from PIL import Image
 import numpy as np
 import shutil
+import matplotlib.pyplot as plt
 
 
 def load_imgs_from_dir():
@@ -51,7 +54,7 @@ def load_imgs_from_dir():
     # ds_train = ds_train.prefetch(tf.data.experimental.AUTOTUNE)
     # ds_val = ds_val.prefetch(tf.data.experimental.AUTOTUNE)
 
-    return ds_train, ds_val#, n_samples
+    return ds_train, ds_val  # , n_samples
 
 
 def save_split_imgs():
@@ -74,3 +77,46 @@ def move_imgs(from_dir, to_dir):
         label_folder = os.path.join(to_dir, str(label))
         os.makedirs(label_folder, exist_ok=True)
         shutil.move(os.path.join(from_dir, file), os.path.join(label_folder, file))
+
+
+def save_imgs():
+    # Load MNIST dataset
+    (ds_train, ds_val), ds_info = tfds.load(
+        'mnist',
+        split=['train', 'test'],
+        shuffle_files=True,
+        as_supervised=True,
+        with_info=True,
+    )
+
+    # Define a function to save images
+    def save_images(dataset, num_images, output_folder):
+        for i, (image, label) in enumerate(dataset.take(num_images)):
+            # image = tf.image.convert_image_dtype(image, dtype=tf.uint8)
+            image = tf.squeeze(image)
+            image = Image.fromarray(image.numpy())
+            image.save(f"{output_folder}/image_{i + 1}_label_{label.numpy()}.png")
+
+    # Specify the output folder
+    output_folder = r"artifacts/datasets/mnist"
+
+    # Create the output folder if it doesn't exist
+    tf.io.gfile.makedirs(output_folder)
+
+    # # Save images from the training dataset
+    save_images(ds_train, 60000, output_folder)
+
+    # # Save images from the test dataset
+    save_images(ds_val, 10000, output_folder)
+
+
+def dataset_info(ds_train):
+    batch = iter(ds_train).next()
+    # batch = ds_train.take(1)
+    print(f'shape of a single batch (batch size, height, width, no. channels): {batch[0].shape}')
+    print(f'max value: {batch[0].max()}, min value: {batch[0].min()}')
+
+    fig, ax = plt.subplots(ncols=4, figsize=(20, 20))
+    for idx, img in enumerate(batch[0][:4]):
+        ax[idx].imshow(img)
+        ax[idx].title.set_text(batch[1][idx])
