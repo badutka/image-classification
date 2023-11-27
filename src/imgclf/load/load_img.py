@@ -12,33 +12,19 @@ import matplotlib.pyplot as plt
 
 
 def load_imgs_from_dir():
-    batch_size = 32
+    batch_size = 128
     img_size = (28, 28)
     data_dir = 'artifacts/datasets/mnist_split/'
+    validation_split_seed = 42
 
-    datagen = ImageDataGenerator(
-        rescale=1. / 255,
+    ds_train, ds_val = tf.keras.utils.image_dataset_from_directory(
+        directory=data_dir,
+        batch_size=batch_size,
+        image_size=img_size,
         validation_split=0.2,
+        subset='both',
+        seed=validation_split_seed,
         # color_mode='grayscale',
-        # shear_range=0.2,
-        # zoom_range=0.2,
-        # horizontal_flip=True
-    )
-
-    ds_train = datagen.flow_from_directory(
-        directory=data_dir,
-        target_size=img_size,
-        batch_size=batch_size,
-        class_mode='sparse',  # 'sparse' for integer labels
-        subset='training'
-    )
-
-    ds_val = datagen.flow_from_directory(
-        directory=data_dir,
-        target_size=img_size,
-        batch_size=batch_size,
-        class_mode='sparse',
-        subset='validation'
     )
 
     return ds_train, ds_val
