@@ -1,6 +1,8 @@
 import tensorflow as tf
 import keras
 
+from imgclf.config.settings import settings
+
 
 class NeuralNetwork():
     def __init__(self):
@@ -12,6 +14,15 @@ class NeuralNetwork():
             keras.layers.Dense(128, activation='relu'),
             keras.layers.Dense(10)
         ])
+
+        return model
+
+    def comp_benchmark(self, model):
+        model.compile(
+            optimizer=keras.optimizers.Adam(0.001),
+            loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+            metrics=[keras.metrics.SparseCategoricalAccuracy()],
+        )
 
         return model
 
@@ -30,15 +41,6 @@ class NeuralNetwork():
 
         return model
 
-    def comp_benchmark(self, model):
-        model.compile(
-            optimizer=keras.optimizers.Adam(0.001),
-            loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-            metrics=[keras.metrics.SparseCategoricalAccuracy()],
-        )
-
-        return model
-
     def comp_conv_1(self, model):
         model.compile(
             optimizer=keras.optimizers.Adam(0.001),
@@ -47,3 +49,22 @@ class NeuralNetwork():
         )
 
         return model
+
+    def fit_conv_1(self, model, ds_train, ds_val, callbacks=None):
+        cb_history = model.fit(
+            ds_train,
+            epochs=settings.models.conv_1.epochs,
+            validation_data=ds_val,
+            callbacks=callbacks
+        )
+        return cb_history
+
+    def get_callbacks(self, name):
+
+        match name:
+            case 'conv_1':
+                callbacks = [tf.keras.callbacks.TensorBoard(log_dir=settings.logs_dir)]
+            case other:
+                callbacks = []
+
+        return callbacks
