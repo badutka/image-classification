@@ -18,8 +18,8 @@ def run_image_saving():
     image_saver = ImageSaver()
     ds_train, ds_val = image_saver.load_dataset()
     tf.io.gfile.makedirs(data_dir)
-    image_saver.save_imgs_by_label(ds_train, 60000, data_dir)
-    image_saver.save_imgs_by_label(ds_train, 10000, data_dir)
+    image_saver.save_imgs_by_label(ds_train, len(ds_train), data_dir)
+    image_saver.save_imgs_by_label(ds_val, len(ds_val), data_dir)
     os.makedirs(data_dir_labeled, exist_ok=True)
     image_saver.move_imgs(data_dir, data_dir_labeled)
 
@@ -65,7 +65,7 @@ class DatasetLoader():
 
     def get_dataset_partitions(self, dataset, ds_size=None, train_split=0.8, val_split=0.1, test_split=0.1, shuffle=True):
         if train_split + test_split + val_split != 1:
-            raise ValueError(f'Split portions do not add up to 1.')
+            raise ValueError(f'Split partitions do not add up to 1.')
 
         if ds_size == None:
             ds_size = len(dataset)
