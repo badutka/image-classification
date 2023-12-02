@@ -1,10 +1,11 @@
-import tensorflow_datasets as tfds
-import tensorflow as tf
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from PIL import Image
-import matplotlib.pyplot as plt
 import shutil
 import os
+import matplotlib.pyplot as plt
+from PIL import Image
+
+import tensorflow_datasets as tfds
+import tensorflow as tf
+from keras.preprocessing.image import ImageDataGenerator
 
 batch_size = 128
 img_size = (28, 28)
