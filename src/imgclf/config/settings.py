@@ -34,10 +34,20 @@ class DataIngestionSettings(UnexpectedPropertyValidator):
     root_dir: Path
 
 
+class Conv_1_Settings(UnexpectedPropertyValidator):
+    epochs: int
+
+
+class ModelsSettings(UnexpectedPropertyValidator):
+    conv_1: Conv_1_Settings
+
+
 class Settings(UnexpectedPropertyValidator):
     artifacts_root: Path
+    logs_dir: Path
 
     data_ingestion: DataIngestionSettings
+    models: ModelsSettings
 
 
 class SettingsManager(metaclass=Singleton):

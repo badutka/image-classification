@@ -1,5 +1,11 @@
 artifacts_root:
   artifacts
+logs_dir:
+  logs
 
 data_ingestion:
   root_dir: artifacts/datasets
+
+models:
+  conv_1:
+    epochs: 6
