@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field, model_validator, constr
 from pathlib import Path
 import typing
 import os
+from box import ConfigBox
 
 from imgclf.common.utils import read_yaml
 
@@ -41,6 +42,10 @@ class Conv_1_Settings(UnexpectedPropertyValidator):
 class ModelsSettings(UnexpectedPropertyValidator):
     conv_1: Conv_1_Settings
 
+class PlotsSettings(UnexpectedPropertyValidator):
+    metrics_layout: dict
+    metrics_xaxis: dict
+    metrics_yaxis: dict
 
 class Settings(UnexpectedPropertyValidator):
     artifacts_root: Path
@@ -48,6 +53,7 @@ class Settings(UnexpectedPropertyValidator):
 
     data_ingestion: DataIngestionSettings
     models: ModelsSettings
+    plots: PlotsSettings
 
 
 class SettingsManager(metaclass=Singleton):
