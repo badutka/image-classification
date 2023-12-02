@@ -65,7 +65,7 @@ class DatasetLoader():
 
     def get_dataset_partitions(self, dataset, ds_size=None, train_split=0.8, val_split=0.1, test_split=0.1, shuffle=True):
         if train_split + test_split + val_split != 1:
-            raise ValueError(f'Split portions do not add up to 1.')
+            raise ValueError(f'Split partitions do not add up to 1.')
 
         if ds_size == None:
             ds_size = len(dataset)
