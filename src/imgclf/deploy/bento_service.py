@@ -1,9 +1,6 @@
 import numpy as np
 import bentoml
 from bentoml.io import NumpyNdarray
-import tensorflow as tf
-
-from imgclf.common.logger import logger
 
 BENTO_MODEL_TAG = "keras_model:hcvtykmsxsyxgogv"
 
