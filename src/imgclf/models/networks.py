@@ -1,6 +1,8 @@
 import tensorflow as tf
 import keras
 
+from typing import List, Tuple
+
 from imgclf.config.settings import settings
 
 
@@ -15,9 +17,6 @@ class NeuralNetwork():
             keras.layers.Dense(10)
         ])
 
-        return model
-
-    def comp_benchmark(self, model):
         model.compile(
             optimizer=keras.optimizers.Adam(0.001),
             loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
@@ -26,10 +25,20 @@ class NeuralNetwork():
 
         return model
 
-    def conv_1(self):
+    def conv_net_1(self, input_shape: Tuple, num_classes: int):
+        """
+        Builds a simple ConvNet model.
+
+        Args:
+            input_shape: The shape of the input data.
+            num_classes: The number of classes to classify.
+
+        Returns:
+            A Keras model.
+        """
         model = keras.models.Sequential()
 
-        model.add(keras.layers.Conv2D(16, (3, 3), 1, activation='relu', input_shape=(28, 28, 3)))
+        model.add(keras.layers.Conv2D(16, (3, 3), 1, activation='relu', input_shape=input_shape))
         model.add(keras.layers.MaxPooling2D())
         model.add(keras.layers.Conv2D(32, (3, 3), 1, activation='relu'))
         model.add(keras.layers.MaxPooling2D())
@@ -37,11 +46,8 @@ class NeuralNetwork():
         model.add(keras.layers.MaxPooling2D())
         model.add(keras.layers.Flatten())
         model.add(keras.layers.Dense(256, activation='relu'))
-        model.add(keras.layers.Dense(10))
+        model.add(keras.layers.Dense(num_classes))
 
-        return model
-
-    def comp_conv_1(self, model):
         model.compile(
             optimizer=keras.optimizers.Adam(0.001),
             loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
@@ -50,20 +56,49 @@ class NeuralNetwork():
 
         return model
 
-    def fit_conv_1(self, model, ds_train, ds_val, callbacks=None):
-        cb_history = model.fit(
+    def train_model(self,
+                    model: keras.Model,
+                    ds_train: tf.data.Dataset,
+                    ds_val: tf.data.Dataset,
+                    num_epochs: int,
+                    callbacks: List[keras.src.callbacks.TensorBoard]
+                    ) -> keras.Model:
+        """
+        Trains a model.
+
+        Args:
+            model: The model to train.
+            ds_train: The training dataset.
+            ds_val: The validation dataset.
+            num_epochs: The number of epochs to train for.
+            callbacks: A list of applicable tensorflow callbacks.
+
+        Returns:
+            The trained model.
+        """
+        model.fit(
             ds_train,
-            epochs=settings.models.conv_1.epochs,
+            epochs=num_epochs,
             validation_data=ds_val,
             callbacks=callbacks
         )
-        return cb_history
+
+        return model
 
     def get_callbacks(self, name):
+        """
+        Retrieves a list of callbacks by case name.
+
+        Args:
+            name: case name to retrieve specific callbacks list.
+
+        Returns:
+            List of tensorflow callbacks.
+        """
 
         match name:
-            case 'conv_1':
-                callbacks = [tf.keras.callbacks.TensorBoard(log_dir=settings.logs_dir)]
+            case 'default':
+                callbacks = [keras.callbacks.TensorBoard(log_dir=settings.logs_dir)]
             case other:
                 callbacks = []
 
