@@ -4,6 +4,7 @@ import keras
 from typing import List, Tuple
 
 from imgclf.config.settings import settings
+from imgclf.common.logger import logger
 
 
 class NeuralNetwork():
@@ -46,13 +47,18 @@ class NeuralNetwork():
         model.add(keras.layers.MaxPooling2D())
         model.add(keras.layers.Flatten())
         model.add(keras.layers.Dense(256, activation='relu'))
-        model.add(keras.layers.Dense(num_classes))
+        # model.add(keras.layers.Dropout(0.5)),
+        model.add(keras.layers.Dense(num_classes))  # , activation="softmax")
 
         model.compile(
             optimizer=keras.optimizers.Adam(0.001),
             loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
             metrics=[keras.metrics.SparseCategoricalAccuracy()],
         )
+
+        # model.compile(
+        #     optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"]
+        # )
 
         return model
 

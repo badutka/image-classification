@@ -1,12 +1,17 @@
 import shutil
 import os
+import random
+import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
+from typing import Tuple
 
 import tensorflow_datasets as tfds
 import tensorflow as tf
 import keras
-from keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
+
+from imgclf.common.logger import logger
 
 
 def run_image_saving(data_dir, data_dir_labeled):
@@ -27,6 +32,35 @@ def run_ds_loading(data_dir_labeled, img_size, batch_size, validation_split_seed
     ds_train, ds_val, ds_test = dataset_loader.standardize_data(ds_train, ds_val, ds_test)
     ds_train, ds_val, ds_test = dataset_loader.optimize_data(ds_train, ds_val, ds_test)
     return ds_train, ds_val, ds_test
+
+
+def sample_random_mnist_data_point() -> Tuple[np.ndarray, np.ndarray]:
+    # Path to the main directory containing subdirectories for each label
+    main_dir = 'artifacts/datasets/mnist_split'
+
+    # Get a list of subdirectories (assuming each subdirectory represents a label)
+    label_dirs = [os.path.join(main_dir, label) for label in os.listdir(main_dir)]
+
+    # Randomly select a label
+    random_label_dir = random.choice(label_dirs)
+
+    # # Get a list of image files in the selected label directory
+    image_files = [os.path.join(random_label_dir, img) for img in os.listdir(random_label_dir) if img.endswith('.png')]
+
+    # Randomly select an image file
+    random_image_file = random.choice(image_files)
+
+    # Load the image using TensorFlow
+    image = load_img(random_image_file, target_size=(28, 28, 3))  # Adjust target_size as needed
+    image_array = img_to_array(image)
+    image_array = image_array / 255.0
+    image_array = np.expand_dims(image_array, axis=0)
+
+    # Display or process the randomly selected label and image
+    logger.info(("Random Label:", os.path.basename(random_label_dir)))
+    logger.info(("Random Image:", os.path.basename(random_image_file)))
+
+    return image_array, os.path.basename(random_label_dir)
 
 
 class DatasetLoader():
