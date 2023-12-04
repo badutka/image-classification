@@ -17,3 +17,5 @@ opencv-python
 tensorflow
 keras
 tensorboard
+
+bentoml
