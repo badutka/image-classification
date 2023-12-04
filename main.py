@@ -17,8 +17,6 @@ from imgclf.models import model_manager
 
 
 def main():
-    model_path = 'artifacts/models'
-    model_file = 'imgclf_1.keras'
     input_shape = (28, 28, 3)
     num_classes = 10
     batch_size = 128
@@ -34,7 +32,7 @@ def main():
     model = neural_network.conv_net_1(input_shape=input_shape, num_classes=num_classes)
     callbacks = neural_network.get_callbacks('default')
     cb_history = neural_network.train_model(model=model, ds_train=ds_train, ds_val=ds_val, num_epochs=settings.models.conv_1.epochs, callbacks=callbacks)
-    model_manager.save_model(model, model_path, model_file)
+    model_manager.save_model(model, settings.model_path, settings.model_file)
 
 
 if __name__ == "__main__":
