@@ -12,6 +12,7 @@ seaborn
 plotly
 
 Pillow
+opencv-python
 
 tensorflow
 keras
