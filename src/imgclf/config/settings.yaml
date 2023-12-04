@@ -1,7 +1,8 @@
-artifacts_root:
-  artifacts
-logs_dir:
-  logs
+artifacts_root: artifacts
+logs_dir: logs
+model_path: artifacts/models
+model_file: imgclf_1.keras
+
 
 data_ingestion:
   root_dir: artifacts/datasets

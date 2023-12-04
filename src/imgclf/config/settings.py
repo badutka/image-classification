@@ -42,14 +42,18 @@ class Conv_1_Settings(UnexpectedPropertyValidator):
 class ModelsSettings(UnexpectedPropertyValidator):
     conv_1: Conv_1_Settings
 
+
 class PlotsSettings(UnexpectedPropertyValidator):
     metrics_layout: dict
     metrics_xaxis: dict
     metrics_yaxis: dict
 
+
 class Settings(UnexpectedPropertyValidator):
     artifacts_root: Path
     logs_dir: Path
+    model_path: Path
+    model_file: Path
 
     data_ingestion: DataIngestionSettings
     models: ModelsSettings
