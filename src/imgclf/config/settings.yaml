@@ -1,0 +1,39 @@
+artifacts_root: artifacts
+logs_dir: logs
+model_path: artifacts/models
+model_file: imgclf_1.keras
+
+
+data_ingestion:
+  root_dir: artifacts/datasets
+
+models:
+  conv_1:
+    epochs: 6
+
+plots:
+  metrics_layout:
+    # autosize=False
+    width: 1600
+    height: 400
+    margin:
+      l: 40
+      r: 10
+      b: 10
+      t: 10
+      pad: 4
+    paper_bgcolor: "#333"
+    plot_bgcolor: '#333'
+    font_color: '#bfbfbf'
+  metrics_xaxis:
+    showline: True
+    linewidth: 1
+    linecolor: 'white'
+    showgrid: False
+    gridcolor: '#494747'
+  metrics_yaxis:
+    showline: True
+    linewidth: 1
+    linecolor: 'white'
+    showgrid: True
+    gridcolor: '#494747'
